@@ -219,7 +219,7 @@ def nodes(env):
             ", ".join('["=", "{0}", "{1}"]'.format(field, env)
                 for field in ['catalog_environment', 'facts_environment'])),
     else:
-        query = ''
+        query = None
 
     status_arg = request.args.get('status', '')
     nodelist = puppetdb.nodes(
