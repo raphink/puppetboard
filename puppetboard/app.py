@@ -397,7 +397,7 @@ def reports(env, page):
         order_by='[{"field": "start_time", "order": "desc"}]')
     total = get_or_abort(puppetdb._query,
         'reports',
-        query=total_query,
+        query=total_query)
     total = total[0]['count']
     reports, reports_events = tee(reports)
     report_event_counts = {}
