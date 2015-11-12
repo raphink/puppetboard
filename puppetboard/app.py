@@ -156,7 +156,7 @@ def index(env):
                 ", ".join('["=", "{0}", "{1}"]'.format(field, env)
                     for field in ['catalog_environment', 'facts_environment']))
     else:
-        query = None
+        query = ''
 
     nodes = get_or_abort(puppetdb.nodes,
         query=query,
@@ -219,7 +219,7 @@ def nodes(env):
             ", ".join('["=", "{0}", "{1}"]'.format(field, env)
                 for field in ['catalog_environment', 'facts_environment'])),
     else:
-        query = None
+        query = ''
 
     status_arg = request.args.get('status', '')
     nodelist = puppetdb.nodes(
@@ -387,7 +387,7 @@ def reports(env, page):
         total_query = '["extract", [["function", "count"]],'\
             '["and", ["=", "environment", "{0}"]]]'.format(env)
     else:
-        reports_query = None
+        reports_query = ''
         total_query = '["extract", [["function", "count"]]]'
 
     reports = get_or_abort(puppetdb.reports,
@@ -619,7 +619,7 @@ def fact(env, fact):
     if env != None:
         query = '["=", "environment", "{0}"]'.format(env)
     else:
-        query = None
+        query = ''
     localfacts = [f for f in yield_or_stop(puppetdb.facts(
         name=fact, query=query))]
     return Response(stream_with_context(stream_template(
@@ -648,7 +648,7 @@ def fact_value(env, fact, value):
     if env != None:
         query = '["=", "environment", "{0}"]'.format(env)
     else:
-        query = None
+        query = ''
     facts = get_or_abort(puppetdb.facts,
         name=fact,
         value=value,
