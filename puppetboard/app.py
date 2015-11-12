@@ -217,7 +217,7 @@ def nodes(env):
     if env != None:
         query = '["and", {0}]'.format(
             ", ".join('["=", "{0}", "{1}"]'.format(field, env)
-                for field in ['catalog_environment', 'facts_environment'])),
+                for field in ['catalog_environment', 'facts_environment']))
     else:
         query = ''
 
@@ -330,8 +330,8 @@ def node(env, node_name):
     check_env(env)
 
     if env != None:
-        query='["and", ["=", "environment", "{0}"],' \
-            '["=", "certname", "{1}"]]'.format(env, node_name),
+        query = '["and", ["=", "environment", "{0}"],' \
+            '["=", "certname", "{1}"]]'.format(env, node_name)
     else:
         query = '["=", "certname", "{0}"]]'.format(node_name)
 
@@ -449,7 +449,7 @@ def reports_node(env, node_name, page):
     if env != None:
         query='["and",' \
             '["=", "environment", "{0}"],' \
-            '["=", "certname", "{1}"]]'.format(env, node_name),
+            '["=", "certname", "{1}"]]'.format(env, node_name)
     else:
         query = '["=", "certname", "{0}"]]'.format(node_name)
 
@@ -759,7 +759,7 @@ def catalogs(env):
         if env != None:
             query = '["and",' \
                 '["=", "catalog_environment", "{0}"],' \
-                '["null?", "catalog_timestamp", false]]'.format(env),
+                '["null?", "catalog_timestamp", false]]'.format(env)
         else:
             query = '["null?", "catalog_timestamp", false]]'
         nodes = get_or_abort(puppetdb.nodes,
