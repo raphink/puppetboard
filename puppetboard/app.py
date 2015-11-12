@@ -616,12 +616,12 @@ def fact(env, fact):
     render_graph = False
     if fact in graph_facts:
         render_graph = True
+    if env != None:
+        query = '["=", "environment", "{0}"]'.format(env)
+    else:
+        query = None
     localfacts = [f for f in yield_or_stop(puppetdb.facts(
-        name=fact,
-        if env != None:
-            query='["=", "environment", "{0}"]'.format(env)))]
-        else:
-            query = None
+        name=fact, query=query))]
     return Response(stream_with_context(stream_template(
         'fact.html',
         name=fact,
