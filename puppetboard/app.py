@@ -79,7 +79,7 @@ def environments():
     return x
 
 def check_env(env):
-    if env not in envs:
+    if env != None and env not in envs:
         abort(404)
 
 app.jinja_env.globals['url_for_pagination'] = url_for_pagination
@@ -122,7 +122,7 @@ def server_error(e):
     return render_template('500.html', envs=envs), 500
 
 
-@app.route('/', defaults={'env': 'production'})
+@app.route('/', defaults={'env': None})
 @app.route('/<env>/')
 def index(env):
     """This view generates the index page and displays a set of metrics and
@@ -151,10 +151,15 @@ def index(env):
         'avg_resources_node': "{0:10.0f}".format(avg_resources_node['Value']),
         }
 
+    if env != None:
+        query = '["and", {0}]'.format(
+                ", ".join('["=", "{0}", "{1}"]'.format(field, env)
+                    for field in ['catalog_environment', 'facts_environment']))
+    else:
+        query = ''
+
     nodes = get_or_abort(puppetdb.nodes,
-        query='["and", {0}]'.format(
-            ", ".join('["=", "{0}", "{1}"]'.format(field, env)
-                for field in ['catalog_environment', 'facts_environment'])),
+        query=query,
         unreported=app.config['UNRESPONSIVE_HOURS'],
         with_status=True)
 
