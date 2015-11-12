@@ -646,7 +646,7 @@ def fact_value(env, fact, value):
     check_env(env)
 
     if env != None:
-        query = '["=", "environment", "{0}"]'.format(env))
+        query = '["=", "environment", "{0}"]'.format(env)
     else:
         query = None
     facts = get_or_abort(puppetdb.facts,
