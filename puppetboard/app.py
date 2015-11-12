@@ -383,20 +383,21 @@ def reports(env, page):
     check_env(env)
 
     if env != None:
-        query='["extract", [["function", "count"]],'\
-            '["and", ["=", "environment", "{0}"]]]'.format(
-                env))
+        reports_query = '["=", "environment", "{0}"]'.format(env)
+        total_query = '["extract", [["function", "count"]],'\
+            '["and", ["=", "environment", "{0}"]]]'.format(env)
     else:
-        query = '["extract", [["function", "count"]]]'
+        reports_query = None
+        total_query = '["extract", [["function", "count"]]]'
 
     reports = get_or_abort(puppetdb.reports,
-        query='["=", "environment", "{0}"]'.format(env),
+        query=reports_query,
         limit=app.config['REPORTS_COUNT'],
         offset=(page-1) * app.config['REPORTS_COUNT'],
         order_by='[{"field": "start_time", "order": "desc"}]')
     total = get_or_abort(puppetdb._query,
         'reports',
-        query=query,
+        query=total_query,
     total = total[0]['count']
     reports, reports_events = tee(reports)
     report_event_counts = {}
