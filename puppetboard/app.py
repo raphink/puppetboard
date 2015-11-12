@@ -645,13 +645,14 @@ def fact_value(env, fact, value):
     """
     check_env(env)
 
+    if env != None:
+        query = '["=", "environment", "{0}"]'.format(env))
+    else:
+        query = None
     facts = get_or_abort(puppetdb.facts,
         name=fact,
         value=value,
-        if env != None:
-            query='["=", "environment", "{0}"]'.format(env))
-        else:
-            query = None
+        query=query)
     localfacts = [f for f in yield_or_stop(facts)]
     return render_template(
         'fact.html',
