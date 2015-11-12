@@ -756,13 +756,14 @@ def catalogs(env):
     if app.config['ENABLE_CATALOG']:
         nodenames = []
         catalog_list = []
+        if env != None:
+            query = '["and",' \
+                '["=", "catalog_environment", "{0}"],' \
+                '["null?", "catalog_timestamp", false]]'.format(env),
+        else:
+            query = '["null?", "catalog_timestamp", false]]'
         nodes = get_or_abort(puppetdb.nodes,
-            if env != None:
-                query='["and",' \
-                    '["=", "catalog_environment", "{0}"],' \
-                    '["null?", "catalog_timestamp", false]]'.format(env),
-            else:
-                query='["null?", "catalog_timestamp", false]]'
+            query=query,
             with_status=False,
             order_by='[{"field": "certname", "order": "asc"}]')
         nodes, temp = tee(nodes)
