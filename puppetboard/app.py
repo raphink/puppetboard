@@ -152,11 +152,13 @@ def index(env):
         }
 
     if env == '*':
-        query = None
+        query = app.config['OVERVIEW_FILTER']
     else:
-        query = '["and", {0}]'.format(
-                ", ".join('["=", "{0}", "{1}"]'.format(field, env)
-                    for field in ['catalog_environment', 'facts_environment']))
+        conditions = ", ".join('["=", "{0}", "{1}"]'.format(field, env)
+                  for field in ['catalog_environment', 'facts_environment'])
+        if app.config['OVERVIEW_FILTER'] != None:
+            conditions += ", {0}".format(app.config['OVERVIEW_FILTER'])
+        query = '["and", {0}]'.format(conditions)
 
     nodes = get_or_abort(puppetdb.nodes,
         query=query,
